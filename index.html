@@ -1,0 +1,109 @@
+
+<script>
+
+var wordsList = [
+                    'cachorro', 
+                    'mapa', 
+                    'danone', 
+                    'gato', 
+                    'calção'];
+
+
+function returnWord(wordsList){
+    return wordsList [Math.floor(Math.random() * wordsList.length)];  
+}
+
+
+var clear = returnWord(wordsList).normalize('NFD').replace(/([\u0300-\u036f]|[^0-9a-zA-Z])/g, '');
+var wordArray = clear.split('');
+
+
+function accountLetters(wordArray){
+    return wordArray.length;
+}
+
+alert("Sua palavra tem: "+accountLetters(wordArray)+" letras.");
+
+
+
+var chutes = [];
+function guessLetter(){
+    var chute = prompt("Chute uma letra!");
+    while(chutes.includes(chute)){
+        chute = prompt("Letra já utilizada. Chute novamente!")
+    }
+    chutes.push(chute);
+    return chute;
+}
+
+function checkLetter(chute, wordArray, lifes){    
+    if(wordArray.includes(chute)){
+        alert("Letra correta!");
+    }else{
+        alert("Você errou! A letra "+chute+" não está presente na palavra.");
+        lifes = lifes - 1 ;
+        // SE o checkLetter der errado mais de 6 vezes, você perdeu
+        //  guardar a informação de quantas vezes o programa passou pelo falso.
+    }
+    return lifes;
+    
+}
+
+
+
+function drawWord(chutes, wordArray){
+    //chutes = ['a','b'];
+    //letrasDaPalavra = ['m', 'a', 'p', 'a'];
+    // _ a _ a
+    result = [];
+    for(var i = 0; i < wordArray.length; i++){
+        var letterTime = wordArray[i];
+        if(chutes.includes(letterTime)){
+            result.push(letterTime) ;
+        }else{
+            result.push('_') ;
+        }
+    }
+    alert(result);
+    return result;
+}
+
+
+function isGameOver(wordArray, lifes){
+    if(lifes == 0){
+        alert('Suas vidas acabaram :(');
+    }else if(wordArray.every(isGuessed)){
+        alert("Você ganhou!");
+    }else{
+        return false;
+    }
+    return true;
+
+}
+
+function isGuessed(element, index, array) {
+  return chutes.includes(element);
+}
+
+
+function main(chutes, wordArray, lifes){
+    lifes = checkLetter(guessLetter(), wordArray, lifes);
+
+    drawWord(chutes, wordArray);
+
+    alert('Você ainda tem: ' + lifes + 'vida(s)');
+
+    if (isGameOver(wordArray, lifes)){
+        alert('Muito obrigado por ter jogado.');
+    }else{
+        main(chutes, wordArray, lifes);
+    }
+}
+
+main(chutes, wordArray, 6);
+
+//MOSTRAR QUANTIDADE DE VIDAS RESTAM    
+
+
+
+</script>
